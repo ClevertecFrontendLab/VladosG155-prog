@@ -104,10 +104,10 @@
 }
 .aside-wrap{
     padding-left: 20px;
-    height: 0px;
+    max-height: 0px;
     transition: .3s all ease-in-out;
     &.active{
-        height: 602px;
+        max-height: 602px;
     }
     @media screen and (max-width: 768px) {
         max-width: 279px;

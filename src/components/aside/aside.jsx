@@ -54,21 +54,22 @@ export const Aside = ({ onClose, isActiveMobileMenu, asideRef = null }) => {
               active: isActiveMenu,
             })}
           >
-            {[...data, ...list].map((menuItem, i) => (
-              <NavLink
-                data-test-id={isTablet ? 'burger-books' : 'navigation-books'}
-                to={`/books/${menuItem.path}`}
-                key={menuItem.id}
-                className={classNames('menuList-item', {
-                  hidden: !isActiveMenu,
-                })}
-              >
-                <p>
-                  {menuItem.name}
-                  <span>{menuItem.count}</span>
-                </p>
-              </NavLink>
-            ))}
+            {!error &&
+              data?.map((menuItem, i) => (
+                <NavLink
+                  data-test-id={isTablet ? 'burger-books' : 'navigation-books'}
+                  to={`/books/${menuItem.path}`}
+                  key={menuItem.id}
+                  className={classNames('menuList-item', {
+                    hidden: !isActiveMenu,
+                  })}
+                >
+                  <p>
+                    {menuItem.name}
+                    <span>{menuItem.count}</span>
+                  </p>
+                </NavLink>
+              ))}
           </div>
         </div>
 

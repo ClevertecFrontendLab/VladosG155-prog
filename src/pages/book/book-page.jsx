@@ -38,175 +38,185 @@ export const BookPage = () => {
   if (isLoading) {
     return <Loader />;
   }
-  if (error) {
-    return <Alert />;
-  }
 
   return (
     <section className='book-page'>
-      <nav>
+      {error ? (
+        <>
+          <Alert />
+          <nav>
+            <div className='container'>
+              <span className='nav-links'>Бизнес книги / {data?.title}</span>
+            </div>
+          </nav>
+        </>
+      ) : (
+        <nav>
+          <div className='container'>
+            <span className='nav-links'>Бизнес книги / {data?.title}</span>
+          </div>
+        </nav>
+      )}
+      {!error && (
         <div className='container'>
-          <span className='nav-links'>Бизнес книги / {data?.title}</span>
-        </div>
-      </nav>
-      <div className='container'>
-        <div className='book-page-main'>
-          <div className='book-page-slider'>
-            {data?.images.length > 0 ? (
-              <>
-                <Swiper
-                  thumbs={{ swiper: thumbsSwiper }}
-                  slidesPerView='1'
-                  pagination={isTablet ? { clickable: true } : false}
-                  loop={true}
-                  data-test-id='slide-big'
-                  modules={[Thumbs, FreeMode, Pagination]}
-                  spaceBetween={20}
-                >
-                  {data.images.map(({ url }) => (
-                    <SwiperSlide className='slide-top'>
-                      <img src={`${baseApiUrl}${url}`} alt='' />
-                    </SwiperSlide>
-                  ))}
-                </Swiper>
-                {data.images.length > 1 && !isTablet && (
+          <div className='book-page-main'>
+            <div className='book-page-slider'>
+              {data?.images.length > 0 ? (
+                <>
                   <Swiper
-                    onSwiper={setThumbsSwiper}
-                    navigation={true}
-                    slidesPerView={6}
+                    thumbs={{ swiper: thumbsSwiper }}
+                    slidesPerView='1'
+                    pagination={isTablet ? { clickable: true } : false}
                     loop={true}
-                    modules={[Thumbs, Navigation]}
-                    spaceBetween={30}
+                    data-test-id='slide-big'
+                    modules={[Thumbs, FreeMode, Pagination]}
+                    spaceBetween={20}
                   >
-                    {data?.images.map(({ url }) => (
-                      <SwiperSlide data-test-id='slide-mini' className='slide'>
+                    {data.images.map(({ url }) => (
+                      <SwiperSlide className='slide-top'>
                         <img src={`${baseApiUrl}${url}`} alt='' />
                       </SwiperSlide>
                     ))}
                   </Swiper>
-                )}
-              </>
-            ) : (
-              <img src={bookImgFree} alt='' />
-            )}
-          </div>
-          <div className='book-page-info'>
-            <h3>{data?.title}</h3>
-            <span>{data?.authors.map((author) => author)}</span>
-            <div className='btn'>
-              <Button fullwidth={true} btnType='main'>
-                Забронировать
-              </Button>
+                  {data.images.length > 1 && !isTablet && (
+                    <Swiper
+                      onSwiper={setThumbsSwiper}
+                      navigation={true}
+                      slidesPerView={6}
+                      loop={true}
+                      modules={[Thumbs, Navigation]}
+                      spaceBetween={30}
+                    >
+                      {data?.images.map(({ url }) => (
+                        <SwiperSlide data-test-id='slide-mini' className='slide'>
+                          <img src={`${baseApiUrl}${url}`} alt='' />
+                        </SwiperSlide>
+                      ))}
+                    </Swiper>
+                  )}
+                </>
+              ) : (
+                <img src={bookImgFree} alt='' />
+              )}
             </div>
-            {!isTablet && (
-              <div className='book-page-info-about'>
-                <h5>О книге</h5>
-                <p>{data?.description}</p>
+            <div className='book-page-info'>
+              <h3>{data?.title}</h3>
+              <span>{data?.authors.map((author) => author)}</span>
+              <div className='btn'>
+                <Button fullwidth={true} btnType='main'>
+                  Забронировать
+                </Button>
               </div>
-            )}
+              {!isTablet && (
+                <div className='book-page-info-about'>
+                  <h5>О книге</h5>
+                  <p>{data?.description}</p>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-        {isTablet && (
-          <div className='book-page-info-about'>
-            <h5>О книге</h5>
-            <div dangerouslySetInnerHTML={{ __html: data?.about }} />
-          </div>
-        )}
-        <div className='book-page-score'>
-          <div className='book-page-info-section'>
-            <h5>Рейтинг</h5>
-            <hr />
-          </div>
-          <div className='book-page-score-block'>
-            <StarRating score={data?.rating} />
-            <h5>{data?.rating}</h5>
-          </div>
-          <div className='book-page-more-info'>
+          {isTablet && (
+            <div className='book-page-info-about'>
+              <h5>О книге</h5>
+              <div dangerouslySetInnerHTML={{ __html: data?.about }} />
+            </div>
+          )}
+          <div className='book-page-score'>
             <div className='book-page-info-section'>
-              <h5>Подробная информация</h5>
+              <h5>Рейтинг</h5>
               <hr />
             </div>
-            <div className='more-info-block-wrapper'>
-              <div className='more-info-block-section'>
-                <div className='more-info-block'>
-                  <p>Издательство</p>
-                  <span>{data?.publish}</span>
-                </div>
-                <div className='more-info-block'>
-                  <p>Год издания</p>
-                  <span>{data?.issueYear}</span>
-                </div>
-
-                <div className='more-info-block'>
-                  <p>Страниц</p>
-                  <span>{data?.pages}</span>
-                </div>
-                <div className='more-info-block'>
-                  <p>Переплёт</p>
-                  <span>{data?.cover}</span>
-                </div>
-
-                <div className='more-info-block'>
-                  <p>Формат</p>
-                  <span>{data?.format}</span>
-                </div>
+            <div className='book-page-score-block'>
+              <StarRating score={data?.rating} />
+              <h5>{data?.rating}</h5>
+            </div>
+            <div className='book-page-more-info'>
+              <div className='book-page-info-section'>
+                <h5>Подробная информация</h5>
+                <hr />
               </div>
-              <div className='more-info-block-section'>
-                <div className='more-info-block'>
-                  <p>Жанр</p>
-                  <span>{data?.categories[0]}</span>
-                </div>
-                <div className='more-info-block'>
-                  <p>Вес</p>
-                  <span>{data?.weight} г</span>
-                </div>
+              <div className='more-info-block-wrapper'>
+                <div className='more-info-block-section'>
+                  <div className='more-info-block'>
+                    <p>Издательство</p>
+                    <span>{data?.publish}</span>
+                  </div>
+                  <div className='more-info-block'>
+                    <p>Год издания</p>
+                    <span>{data?.issueYear}</span>
+                  </div>
 
-                <div className='more-info-block'>
-                  <p>ISBN</p>
-                  <span>{data?.ISBN}</span>
+                  <div className='more-info-block'>
+                    <p>Страниц</p>
+                    <span>{data?.pages}</span>
+                  </div>
+                  <div className='more-info-block'>
+                    <p>Переплёт</p>
+                    <span>{data?.cover}</span>
+                  </div>
+
+                  <div className='more-info-block'>
+                    <p>Формат</p>
+                    <span>{data?.format}</span>
+                  </div>
                 </div>
-                <div className='more-info-block'>
-                  <p>Изготовитель</p>
-                  <span>{data?.producer}</span>
+                <div className='more-info-block-section'>
+                  <div className='more-info-block'>
+                    <p>Жанр</p>
+                    <span>{data?.categories[0]}</span>
+                  </div>
+                  <div className='more-info-block'>
+                    <p>Вес</p>
+                    <span>{data?.weight} г</span>
+                  </div>
+
+                  <div className='more-info-block'>
+                    <p>ISBN</p>
+                    <span>{data?.ISBN}</span>
+                  </div>
+                  <div className='more-info-block'>
+                    <p>Изготовитель</p>
+                    <span>{data?.producer}</span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div className='book-page-comments'>
-            <div className='book-page-info-section'>
-              <button
-                data-test-id='button-hide-reviews'
-                onClick={toggleShowComments}
-                className={classNames('', {
-                  active: showComments,
-                })}
-                type='button'
-              >
-                Отзывы <span>{data?.comments?.length}</span>
-                <Icon name='angleDown' />
-              </button>
-              <hr />
-            </div>
-            {showComments && (
-              <div>
-                {data?.comments &&
-                  data.comments.map((comment) => (
-                    <CommentCard
-                      avatar={comment.user.avatarUrl}
-                      name={`${comment.user.firstName} ${comment.user.lastName}`}
-                      date={comment.createdAt}
-                      text={comment.text}
-                      rating={4}
-                    />
-                  ))}
+            <div className='book-page-comments'>
+              <div className='book-page-info-section'>
+                <button
+                  data-test-id='button-hide-reviews'
+                  onClick={toggleShowComments}
+                  className={classNames('', {
+                    active: showComments,
+                  })}
+                  type='button'
+                >
+                  Отзывы <span>{data?.comments?.length}</span>
+                  <Icon name='angleDown' />
+                </button>
+                <hr />
               </div>
-            )}
-            <div data-test-id='button-rating' className='book-page-button'>
-              <Button btnType='main'>оценить книгу</Button>
+              {showComments && (
+                <div>
+                  {data?.comments &&
+                    data.comments.map((comment) => (
+                      <CommentCard
+                        avatar={comment.user.avatarUrl}
+                        name={`${comment.user.firstName} ${comment.user.lastName}`}
+                        date={comment.createdAt}
+                        text={comment.text}
+                        rating={comment.rating}
+                      />
+                    ))}
+                </div>
+              )}
+              <div data-test-id='button-rating' className='book-page-button'>
+                <Button btnType='main'>оценить книгу</Button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
     </section>
   );
 };

@@ -52,90 +52,89 @@ export const MainPage = () => {
     return <Loader />;
   }
 
-  if (error) {
-    return <Alert />;
-  }
-
   return (
     <div className='container'>
       <section className={styles.root}>
-        {!isTablet && <Aside />}
-        <div className={styles.mainPageWrap}>
-          <div className={styles.topMenu}>
-            <div className={styles.topMenuFirst}>
-              {!isMobile ? (
-                <div className={styles.mainPageInput}>
-                  <Input iconName='search' iconPosition='left' placeholder='Поиск книги или автора…' />
-                </div>
-              ) : (
-                !isShowSearch && (
-                  <div className={styles.button} data-test-id='button-search-open'>
-                    <Button onClick={toggleShowSearch} rounded={true}>
-                      <Icon name='search' />
-                    </Button>
+        <Aside />
+        {error && <Alert />}
+        {!error && (
+          <div className={styles.mainPageWrap}>
+            <div className={styles.topMenu}>
+              <div className={styles.topMenuFirst}>
+                {!isMobile ? (
+                  <div className={styles.mainPageInput}>
+                    <Input iconName='search' iconPosition='left' placeholder='Поиск книги или автора…' />
                   </div>
-                )
-              )}
+                ) : (
+                  !isShowSearch && (
+                    <div className={styles.button} data-test-id='button-search-open'>
+                      <Button onClick={toggleShowSearch} rounded={true}>
+                        <Icon name='search' />
+                      </Button>
+                    </div>
+                  )
+                )}
 
-              <div
-                className={classNames(styles.inputMobile, {
-                  [styles.active]: isShowSearch,
-                  [styles.hidden]: !isShowSearch,
-                })}
-              >
-                <Input
-                  iconName='close'
-                  data-test-id='input-search'
-                  iconAction={toggleShowSearch}
-                  iconPosition='right'
-                  placeholder='Поиск книги или автора…'
-                />
+                <div
+                  className={classNames(styles.inputMobile, {
+                    [styles.active]: isShowSearch,
+                    [styles.hidden]: !isShowSearch,
+                  })}
+                >
+                  <Input
+                    iconName='close'
+                    data-test-id='input-search'
+                    iconAction={toggleShowSearch}
+                    iconPosition='right'
+                    placeholder='Поиск книги или автора…'
+                  />
+                </div>
+
+                {!isShowSearch && (
+                  <Button rounded={isMobile ? true : false}>
+                    <Icon name='dropDown' />
+                    {!isMobile && <span style={{ marginLeft: '8px' }}>По рейтингу</span>}
+                  </Button>
+                )}
               </div>
-
               {!isShowSearch && (
-                <Button rounded={isMobile ? true : false}>
-                  <Icon name='dropDown' />
-                  {!isMobile && <span style={{ marginLeft: '8px' }}>По рейтингу</span>}
-                </Button>
+                <div className={styles.topMenuLast}>
+                  {viewButotns.map((button) => (
+                    <Button
+                      key={button.iconName}
+                      rounded={true}
+                      className={viewType === button.type ? 'active' : ''}
+                      onClick={() => setViewType(button.type)}
+                      dataTest={button.dataType}
+                    >
+                      <Icon name={button.iconName} />
+                    </Button>
+                  ))}
+                </div>
               )}
             </div>
-            {!isShowSearch && (
-              <div className={styles.topMenuLast}>
-                {viewButotns.map((button) => (
-                  <Button
-                    key={button.iconName}
-                    rounded={true}
-                    className={viewType === button.type ? 'active' : ''}
-                    onClick={() => setViewType(button.type)}
-                    dataTest={button.dataType}
-                  >
-                    <Icon name={button.iconName} />
-                  </Button>
-                ))}
-              </div>
-            )}
-          </div>
 
-          <div className={viewTypeClassName}>
-            {data?.map((book) => (
-              <ProductCard
-                key={book.id}
-                id={book.id}
-                authors={book.authors}
-                histories={book.histories}
-                title={book.title}
-                rating={book.rating}
-                booking={book.booking}
-                categories={book.categories}
-                issueYear={book.issueYear}
-                delivery={book.delivery}
-                view={viewType}
-                image={book.image}
-                score={book.score}
-              />
-            ))}
+            <div className={viewTypeClassName}>
+              {data?.map((book) => (
+                <ProductCard
+                  key={book.id}
+                  id={book.id}
+                  authors={book.authors}
+                  histories={book.histories}
+                  title={book.title}
+                  rating={book.rating}
+                  booking={book.booking}
+                  categories={book.categories}
+                  issueYear={book.issueYear}
+                  delivery={book.delivery}
+                  view={viewType}
+                  image={book.image}
+                  score={book.score}
+                />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </section>
     </div>
   );
