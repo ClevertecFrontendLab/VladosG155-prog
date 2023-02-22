@@ -52,7 +52,9 @@ export const Header = () => {
             <span />
           </button>
         </div>
-        {isTablet && <Aside asideRef={menuRef} isActiveMobileMenu={isActiveMenu} onClose={toggleMenu} />}
+        {isTablet && (
+          <Aside asideRef={menuRef} isActiveMobileMenu={isActiveMenu} onClose={() => setIsActiveMenu(false)} />
+        )}
         <h3>Библиотека</h3>
         {!isTablet && (
           <div className='user-menu'>

@@ -4,6 +4,11 @@
         background: #F9F9FA;
         padding: 20px 0px;
     }
+    .nav-links{
+        & a{
+            margin-right: 5px;
+        }
+    }
 }
 .book-page-main{
     display: flex;
