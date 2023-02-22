@@ -47,14 +47,12 @@ export const ProductCard = ({
     return btn;
   };
   const [newTitle, setNewTitle] = useState(title);
-  const text = title?.length > 35 ? `${title?.slice(0, 30)}...` : title;
+  const text = title?.length > 35 ? `${title?.slice(0, 53)}...` : title;
 
   const { categoriesList, activeCategory } = useSelector((state) => state.books);
 
-  const findedCategory = categoriesList.find((category) => category.name === categories[0]);
-
   useEffect(() => {
-    const text = `<h2>${title}</h2>`;
+    const text = `<h2>${title?.length > 25 ? `${title?.slice(0, 53)}...` : title}</h2>`;
     const regexp = new RegExp(searchValue, 'ig');
     const newStr = text.replace(regexp, `<span className='red' data-test-id=highlight-matches>$&</span>`);
     setNewTitle(newStr);
@@ -70,7 +68,7 @@ export const ProductCard = ({
         {searchValue.length > 0 ? (
           <div className='title-wrapper' dangerouslySetInnerHTML={{ __html: newTitle }} />
         ) : (
-          <h2>{title}</h2>
+          <h2>{text}</h2>
         )}
         <p className='product-card-published'>{authors.map((author) => author)}</p>
         {view === 'lists' && (

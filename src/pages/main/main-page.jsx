@@ -179,9 +179,13 @@ export const MainPage = () => {
                   />
                 ))
               ) : inputValue.length > 0 ? (
-                <h2 data-test-id='search-result-not-found'>По запросу ничего не найдено</h2>
+                <h2 className={styles.errorTitle} data-test-id='search-result-not-found'>
+                  По запросу ничего не найдено
+                </h2>
               ) : (
-                <h2 data-test-id='empty-category'>В этой категории книг ещё нет</h2>
+                <h2 className={styles.errorTitle} data-test-id='empty-category'>
+                  В этой категории книг ещё нет
+                </h2>
               )}
             </div>
           </div>
