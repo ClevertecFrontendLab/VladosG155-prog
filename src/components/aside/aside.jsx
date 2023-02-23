@@ -1,22 +1,30 @@
 import { useState, useEffect } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import classNames from 'classnames';
 import './aside.scss';
 import { Icon } from '../icon/icon';
 import { screens, useMediaQuery } from '../../hooks/use-media-query';
-import { useGetBookCategoriesQuery } from '../../store/api/book-api';
+import { useGetAllBooksQuery, useGetBookCategoriesQuery } from '../../store/api/book-api';
 import { Loader } from '../loader/loader';
 
-const list = [{ name: 'Все книги', ref: 'path' }];
+import { setCategoriesList, setCategory } from '../../store/slices/books-slice';
+
+const list = [{ name: 'Все книги', path: 'all' }];
 
 export const Aside = ({ onClose, isActiveMobileMenu, asideRef = null }) => {
   const [menuList, setMenuList] = useState(list);
   const isTablet = useMediaQuery(screens.tablet);
   const [isActiveMenu, setIsActiveMenu] = useState(true);
 
+  const [activeCategory, setActiveCategory] = useState('all');
+
   const { pathname } = useLocation();
 
-  const { data, error, isLoading } = useGetBookCategoriesQuery();
+  const { data: categories, isLoading, error, isFullfiled: categoriesFullfiled } = useGetBookCategoriesQuery();
+  const { data: books } = useGetAllBooksQuery({ skip: categoriesFullfiled });
+
+  const dispatch = useDispatch();
 
   const toggleMenu = () => {
     setIsActiveMenu((prev) => !prev);
@@ -28,6 +36,34 @@ export const Aside = ({ onClose, isActiveMobileMenu, asideRef = null }) => {
     }
   }, [pathname]);
 
+  const categoriesCount = categories?.reduce((accum, current) => {
+    const obj = {
+      ...current,
+      count: 0,
+    };
+    books?.forEach((book) => {
+      if (book.categories.includes(obj.name)) {
+        obj.count += 1;
+      }
+    });
+
+    accum.push(obj);
+    return accum;
+  }, []);
+
+  useEffect(() => {
+    if (!isLoading) {
+      dispatch(setCategoriesList(categories));
+    }
+  }, [isLoading, categories, dispatch]);
+
+  const changeCategory = (category) => {
+    setActiveCategory(category);
+    dispatch(setCategory(category));
+    if (isTablet) {
+      onClose();
+    }
+  };
   return (
     <div
       ref={asideRef}
@@ -55,19 +91,36 @@ export const Aside = ({ onClose, isActiveMobileMenu, asideRef = null }) => {
             })}
           >
             {!error &&
-              data?.map((menuItem, i) => (
+              categoriesCount &&
+              [...list, ...categoriesCount]?.map((menuItem, i) => (
                 <NavLink
-                  data-test-id={isTablet ? 'burger-books' : 'navigation-books'}
                   to={`/books/${menuItem.path}`}
                   key={menuItem.id}
+                  onClick={() => changeCategory(menuItem.path)}
                   className={classNames('menuList-item', {
                     hidden: !isActiveMenu,
                   })}
                 >
-                  <p>
+                  <p
+                    data-test-id={
+                      i === 0
+                        ? isTablet
+                          ? 'burger-books'
+                          : 'navigation-books'
+                        : isTablet
+                        ? `burger-${menuItem.path}`
+                        : `navigation-${menuItem.path}`
+                    }
+                  >
                     {menuItem.name}
-                    <span>{menuItem.count}</span>
                   </p>
+                  <span
+                    data-test-id={
+                      isTablet ? `burger-book-count-for-${menuItem.path}` : `navigation-book-count-for-${menuItem.path}`
+                    }
+                  >
+                    {menuItem.count}
+                  </span>
                 </NavLink>
               ))}
           </div>

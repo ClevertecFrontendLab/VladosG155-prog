@@ -27,9 +27,13 @@ export const BookPage = () => {
 
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   const [showComments, setShowComments] = useState(true);
-  const { id } = useParams();
-
+  const { id, type } = useParams();
   const { data, error, isLoading } = useGetBookByIdQuery(id);
+
+  const { categoriesList, activeCategory } = useSelector((state) => state.books);
+
+  const findedCategory =
+    activeCategory === 'all' ? 'Все книги' : categoriesList.find((category) => category.path === type).name;
 
   const toggleShowComments = () => {
     setShowComments((prev) => !prev);
@@ -46,14 +50,24 @@ export const BookPage = () => {
           <Alert />
           <nav>
             <div className='container'>
-              <span className='nav-links'>Бизнес книги / {data?.title}</span>
+              <span className='nav-links'>
+                <Link data-test-id='breadcrumbs-link' to={`/books/${activeCategory}`}>
+                  {findedCategory}
+                </Link>
+                {findedCategory} / <span data-test-id='book-name'>{data?.title}</span>
+              </span>
             </div>
           </nav>
         </>
       ) : (
         <nav>
           <div className='container'>
-            <span className='nav-links'>Бизнес книги / {data?.title}</span>
+            <span className='nav-links'>
+              <Link data-test-id='breadcrumbs-link' to={`/books/${activeCategory}`}>
+                {findedCategory}
+              </Link>
+              / <span data-test-id='book-name'>{data?.title}</span>
+            </span>
           </div>
         </nav>
       )}
@@ -100,7 +114,7 @@ export const BookPage = () => {
               )}
             </div>
             <div className='book-page-info'>
-              <h3>{data?.title}</h3>
+              <h3 data-test-id='book-title'>{data?.title}</h3>
               <span>{data?.authors.map((author) => author)}</span>
               <div className='btn'>
                 <Button fullwidth={true} btnType='main'>
