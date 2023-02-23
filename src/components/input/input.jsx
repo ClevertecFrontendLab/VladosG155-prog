@@ -18,7 +18,6 @@ export const Input = ({ value, onChange, iconName, iconPosition, placeholder, ic
       <input
         className='input'
         data-test-id='input-search'
-        style={{ caretColor: 'rgb(248, 54, 0) ' }}
         value={value}
         onChange={change}
         placeholder={placeholder}
