@@ -9,9 +9,10 @@ export const Button = ({
   disabled,
   className = '',
   dataTest,
+  height = 'auto',
 }) => (
   <button
-    style={fullwidth ? { width: '100%' } : null}
+    style={fullwidth ? { width: '100%', height } : null}
     type='button'
     className={`button ${className}`}
     data-type={btnType}

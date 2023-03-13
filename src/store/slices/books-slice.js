@@ -18,7 +18,7 @@ export const bookSlice = createSlice({
     },
     filterBooksByCategory(state, action) {
       if (state.activeCategory !== 'all') {
-        state.filteredBooks = state.books.filter((book) => book.categories.includes(action.payload.type));
+        state.filteredBooks = state.books?.filter((book) => book.categories?.includes(action.payload.type));
       } else {
         state.filteredBooks = state.books;
       }
@@ -27,7 +27,7 @@ export const bookSlice = createSlice({
       } else {
         state.filteredBooks = state.filteredBooks?.sort((a, b) => (a.rating > b.rating ? 1 : -1));
       }
-      state.filteredBooks = state.filteredBooks.filter((book) =>
+      state.filteredBooks = state.filteredBooks?.filter((book) =>
         book.title.toLowerCase().includes(action.payload.search.toLowerCase())
       );
     },
