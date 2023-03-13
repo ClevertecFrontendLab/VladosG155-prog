@@ -2,14 +2,19 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   globalLoader: false,
+  user: null,
 };
 
 export const globalSlice = createSlice({
   name: 'global',
   initialState,
-  reducers: {},
+  reducers: {
+    setUser(state, action) {
+      state.user = action.payload.user;
+    },
+  },
 });
 
-export const { setGlobalLoader } = globalSlice.actions;
+export const { setUser } = globalSlice.actions;
 
 export const { reducer } = globalSlice;

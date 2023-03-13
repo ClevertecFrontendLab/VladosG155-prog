@@ -1,9 +1,11 @@
 import { Suspense, useEffect, useState } from 'react';
 import classNames from 'classnames';
-import { useParams } from 'react-router-dom';
+import { useParams, Navigate } from 'react-router-dom';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { Aside } from '../../components/aside/aside';
 import { Button } from '../../components/button/button';
+
 import { Icon } from '../../components/icon/icon';
 import { Input } from '../../components/input/input';
 import { ProductCard } from '../../components/product-card/product-card';
@@ -85,6 +87,12 @@ export const MainPage = () => {
 
   if (isLoading) {
     return <Loader />;
+  }
+
+  const token = localStorage.getItem('jwt');
+
+  if (!token) {
+    return <Navigate to='/auth' />;
   }
 
   return (

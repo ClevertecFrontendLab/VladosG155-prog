@@ -1,19 +1,28 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { baseApiUrl } from '../../settings/api';
+import { axiosBaseQuery } from '../../settings/axios';
 
 export const bookApi = createApi({
   reducerPath: 'bookApi',
-  baseQuery: fetchBaseQuery({ baseUrl: `${baseApiUrl}/api` }),
+  baseQuery: axiosBaseQuery({
+    baseUrl: `${baseApiUrl}/api`,
+  }),
   endpoints: (builder) => ({
     getAllBooks: builder.query({
-      query: () => '/books',
+      query: () => ({
+        url: '/books',
+        method: 'GET',
+      }),
     }),
     getBookById: builder.query({
-      query: (id) => ({ url: `/books/${id}` }),
+      query: (id) => ({ url: `/books/${id}`, method: 'GET' }),
     }),
     getBookCategories: builder.query({
-      query: () => '/categories',
+      query: () => ({
+        url: '/categories',
+        method: 'GET',
+      }),
     }),
   }),
 });

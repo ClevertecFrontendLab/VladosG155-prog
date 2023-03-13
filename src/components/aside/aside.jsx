@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import classNames from 'classnames';
 import './aside.scss';
@@ -25,7 +25,7 @@ export const Aside = ({ onClose, isActiveMobileMenu, asideRef = null }) => {
   const { data: books } = useGetAllBooksQuery({ skip: categoriesFullfiled });
 
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const toggleMenu = () => {
     setIsActiveMenu((prev) => !prev);
   };
@@ -64,6 +64,12 @@ export const Aside = ({ onClose, isActiveMobileMenu, asideRef = null }) => {
       onClose();
     }
   };
+
+  const onExit = () => {
+    localStorage.removeItem('jwt');
+    navigate('/auth');
+  };
+
   return (
     <div
       ref={asideRef}
@@ -137,7 +143,9 @@ export const Aside = ({ onClose, isActiveMobileMenu, asideRef = null }) => {
         {isTablet && (
           <div className='aside-profile'>
             <p>Профиль</p>
-            <p>Выход</p>
+            <button onClick={onExit} type='button' data-test-id='exit-button'>
+              Выход
+            </button>
           </div>
         )}
       </div>
