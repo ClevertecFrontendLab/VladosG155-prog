@@ -184,7 +184,7 @@ export const ForgotPass = () => {
                       name='password'
                       type='password'
                       control={controlSecond}
-                      description='Пароль не менее 8 символов, с заглавной буквой и цифрой'
+                      description={`Пароль <span className=${styles.unhinted}>не менее 8 символов</span>, с <span className=${styles.unhinted}>заглавной буквой</span> и <span className=${styles.unhinted}>цифрой</span>`}
                     />
                   )}
                 />
@@ -196,14 +196,17 @@ export const ForgotPass = () => {
                       {...field}
                       ref={null}
                       placeholder='Повторите пароль'
-                      description={errors2.passwordConfirmation && 'Пароли не совпадают'}
                       name='passwordConfirmation'
                       type='password'
                       control={controlSecond}
                     />
                   )}
                 />
-
+                {errors2.passwordConfirmation && (
+                  <h2 data-test-id='hint' className={styles.hint}>
+                    Пароли не совпадают
+                  </h2>
+                )}
                 <Button
                   btnType='main'
                   disabled={errors2.password || errors2.passwordConfirmation}

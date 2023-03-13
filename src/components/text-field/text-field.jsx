@@ -23,26 +23,40 @@ export const TextField = ({ placeholder, name, description = '', control, type }
   const [inputType, setInputType] = useState(type);
   useEffect(() => {
     const text = `${description}`;
-    let newStr = text;
 
+    let newStr = text;
     if (!errors[name]) {
       setNewDescription(text);
     }
 
+    console.log(errors);
+
     const errorList = errors[name] ? Object.values(errors[name].types).flat(1) : null;
 
+    const descriptionHasSpan = description.match('<span[^>]*>');
+
+    console.log(descriptionHasSpan);
+    console.log(description);
     if (errorList && isFocused) {
       errorList.forEach((match) => {
         const regexp = new RegExp(match, 'ig');
-        newStr = newStr.replace(regexp, `<span className=${styles.hinted}>$&</span>`);
+        if (descriptionHasSpan) {
+          // eslint-disable-next-line
+          const reg = new RegExp(`<span[^>]*>${match}+<\/span>`, 'ig');
+          console.log('reg', reg);
+          // eslint-disable-next-line
+          console.log('matched', newStr.match(reg));
+          newStr = newStr.replace(reg, `<span className=${styles.hint}>${match}</span>`);
+        } else {
+          newStr = newStr.replace(regexp, `<span  className=${styles.hint}>$&</span>`);
+        }
       });
     } else if (errorList && !isFocused) {
-      newStr = `<span>${description}</span>`;
+      newStr = `<span className=${styles.hint}>${description}</span>`;
     }
 
     setNewDescription(newStr);
   }, [description, field, errors, name, isFocused]);
-
   const changeInputType = () => {
     if (inputType === 'password') {
       setInputType('text');
@@ -134,20 +148,21 @@ export const TextField = ({ placeholder, name, description = '', control, type }
               </button>
             )}
 
-            {!errors[name] ||
-              (field.value?.length < 0 && (
-                <div className={styles.done}>
-                  <Icon name='done' />
-                </div>
-              ))}
+            {name !== 'passwordConfirmation' && !errors[name] && field.value.length > 0 && (
+              <div data-test-id='checkmark' className={styles.done}>
+                <Icon name='done' />
+              </div>
+            )}
           </>
         )}
       </div>
-      {field.value.length <= 0 && !isFocused && errors[name] ? (
-        parse(`<span className=${styles.hint} data-test-id="hint">Поле не может быть пустым</span>`)
-      ) : (
-        <h2 data-test-id='hint'>{parse(newDescription)}</h2>
-      )}
+      {field.value.length <= 0 && !isFocused && errors[name]
+        ? parse(`<span className=${styles.hint} data-test-id="hint">Поле не может быть пустым</span>`)
+        : description && (
+            <h2 data-test-id='hint' style={!isFocused && errors[name] ? { color: 'rgb(244, 44, 79)' } : null}>
+              {parse(newDescription)}
+            </h2>
+          )}
     </div>
   );
 };

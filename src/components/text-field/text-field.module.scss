@@ -79,8 +79,11 @@
         line-height: 16px;
         letter-spacing: 0.2px;
         color: rgb(167, 167, 167);
-        & span{
+        & span.hint{
             color: rgb(244, 44, 79);
+            & span{
+                color: rgb(244, 44, 79);
+            }
         }
     }
 }

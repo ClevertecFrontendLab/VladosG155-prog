@@ -139,7 +139,7 @@ export const RegisterPage = () => {
                       name='username'
                       ref={null}
                       control={control}
-                      description='Используйте для логина латинский алфавит и цифры'
+                      description={`Используйте для логина <span className=${styles.unhinted}>латинский алфавит</span> и <span className=${styles.unhinted}>цифры</span>`}
                     />
                   )}
                 />
@@ -154,12 +154,13 @@ export const RegisterPage = () => {
                       name='password'
                       type='password'
                       control={control}
-                      description='Пароль не менее 8 символов, с заглавной буквой и цифрой'
+                      description={`Пароль <span className=${styles.unhinted}>не менее 8 символов</span>, с <span className=${styles.unhinted}>заглавной буквой</span> и <span className=${styles.unhinted}>цифрой</span>`}
                     />
                   )}
                 />
                 <Button
                   btnType='main'
+                  disabled={errors.password || errors.username}
                   onClick={async () => {
                     const resp = await trigger(['username', 'password']);
                     if (resp) {
