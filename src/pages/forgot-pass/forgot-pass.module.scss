@@ -1,5 +1,5 @@
 .root{
-    background: #F83600;
+    background: linear-gradient(231.58deg, #F83600 -53.35%, #F9D423 297.76%);
     width: 100vw;
     height: 100vh;
     display: flex;
@@ -100,6 +100,10 @@
         letter-spacing: 0.1px;
         color: #FFFFFF;
         margin-bottom: 46px;
+        @media screen and (max-width: 600px) {
+            font-size: 18px;
+            margin-bottom: 2px;
+        }
     }
     & p{
         font-weight: 600;

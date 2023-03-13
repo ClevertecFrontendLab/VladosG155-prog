@@ -8,7 +8,7 @@ import { Icon } from '../icon/icon';
 
 import styles from './text-field.module.scss';
 
-export const TextField = ({ placeholder, name, description = '', control, type }) => {
+export const TextField = ({ placeholder, name, description = '', control, type, onBlurP, onFocusP }) => {
   const {
     field,
     fieldState: { isTouched },
@@ -68,6 +68,9 @@ export const TextField = ({ placeholder, name, description = '', control, type }
   const onBlur = () => {
     field.onBlur();
     setIsFocused(false);
+    if (onBlurP) {
+      onBlurP();
+    }
   };
 
   const telMask = [
@@ -131,7 +134,12 @@ export const TextField = ({ placeholder, name, description = '', control, type }
             autoComplete='on'
             name={field.name}
             ref={field.ref}
-            onFocus={() => setIsFocused(true)}
+            onFocus={() => {
+              if (onFocusP) {
+                onFocusP();
+              }
+              setIsFocused(true);
+            }}
           />
         )}
 

@@ -60,6 +60,8 @@ export const ForgotPass = () => {
   const [changedError, setChangedError] = useState(false);
   const [sendNewPass, responsePass] = useResetPassMutation();
 
+  const [isBluredConfirmation, setIsBluredConfirmation] = useState(false);
+
   const { search } = useLocation();
   const navigate = useNavigate();
 
@@ -194,6 +196,8 @@ export const ForgotPass = () => {
                   render={({ field }) => (
                     <TextField
                       {...field}
+                      onBlurP={() => setIsBluredConfirmation(true)}
+                      onFocusP={() => setIsBluredConfirmation(false)}
                       ref={null}
                       placeholder='Повторите пароль'
                       name='passwordConfirmation'
@@ -202,14 +206,14 @@ export const ForgotPass = () => {
                     />
                   )}
                 />
-                {errors2.passwordConfirmation && (
+                {errors2.passwordConfirmation && isBluredConfirmation && (
                   <h2 data-test-id='hint' className={styles.hint}>
                     Пароли не совпадают
                   </h2>
                 )}
                 <Button
                   btnType='main'
-                  disabled={errors2.password || errors2.passwordConfirmation}
+                  disabled={errors2.passwordConfirmation && isBluredConfirmation}
                   onClick={handleSumbitSecond(onSubmitPass)}
                   fullwidth={true}
                   height='52px'
